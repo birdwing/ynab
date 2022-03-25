@@ -244,15 +244,48 @@ class YnabData:
                 if category.name not in self.categories:
                     continue
 
+                cat = {}
+                cat["balance"] = category.balance / 1000
+                cat["budgeted"] = category.budgeted / 1000
+                cat["activity"] = category.activity / 100
+                if c.goal_type == "TB":
+                    cat["goal_type"] = "Target Balance"
+                elif c.goal_type == "TBD":
+                    cat["goal_type"] = "Target Balance by Date"
+                elif c.goal_type == "MF":
+                    cat["goal_type"] = "Montly Funding"
+                elif c.goal_type == "NEED":
+                    cat["goal_type"] = "Monthly Spending"
+                else:
+                    cat["goal_type"] = c.goal_type
+                cat["goal_target"] = category.goal_target / 1000
+                cat["goal_target_month"] = category.goal_target_month
+                cat["goal_percentage_complete"] = category.goal_percentage_complete
+
                 self.hass.data[DOMAIN_DATA].update(
-                    [(category.name, category.balance / 1000)]
+                    [(category.name + "_balance", cat["balance"])]
                 )
                 self.hass.data[DOMAIN_DATA].update(
-                    [(category.name + "_budgeted", category.budgeted / 1000)]
+                    [(category.name + "_budgeted", cat["budgeted"])]
+                )
+                self.hass.data[DOMAIN_DATA].update(
+                    [(category.name + "_activity", cat["activity"])]
+                )
+                self.hass.data[DOMAIN_DATA].update(
+                    [(category.name + "_goal_type", cat["goal_type"])]
+                )
+                self.hass.data[DOMAIN_DATA].update(
+                    [(category.name + "_goal_target", cat["goal_target"])]
+                )
+                self.hass.data[DOMAIN_DATA].update(
+                    [(category.name + "_goal_target_month", cat["goal_target_month"])]
+                )
+                self.hass.data[DOMAIN_DATA].update(
+                    [(category.name + "_goal_percentage_complete", cat["goal_percentage_complete"])]
                 )
                 _LOGGER.debug(
                     "Received data for categories: %s",
-                    [category.name, category.balance / 1000, category.budgeted / 1000],
+                    [c.name, cat],
                 )
 
     async def request_import(self):
