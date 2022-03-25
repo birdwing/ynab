@@ -304,7 +304,6 @@ class YnabData:
                 async with session.post(url=import_endpoint) as response:
                     if response.status in [200, 201]:
                         response_data = json.loads(await response.text())
-
                         _LOGGER.debug(
                             "Imported transactions: %s",
                             len(response_data["data"]["transaction_ids"]),

@@ -61,13 +61,50 @@ class ynabSensor(Entity):
         # category attributes
         if self._categories is not None:
             for category in self._categories:
-                if self.hass.data[DOMAIN_DATA].get(category) is not None:
-                    self.attr[category.replace(" ", "_").lower()] = self.hass.data[
+                if self.hass.data[DOMAIN_DATA].get(category + '_balance') is not None:
+                    self.attr[category.replace(" ", "_").lower() + '_balance'] = self.hass.data[
                         DOMAIN_DATA
-                    ].get(category)
-                    self.attr[
-                        (category + "_budgeted").replace(" ", "_").lower()
-                    ] = self.hass.data[DOMAIN_DATA].get(category + "_budgeted")
+                    ].get(category + '_balance')
+                else:
+                    category_error = CATEGORY_ERROR.format(category=category)
+                    _LOGGER.error(category_error)
+                    
+                if self.hass.data[DOMAIN_DATA].get(category + '_budgeted') is not None:
+                    self.attr[category.replace(" ", "_").lower() + '_budgeted'] = self.hass.data[
+                        DOMAIN_DATA
+                    ].get(category + '_budgeted')
+                else:
+                    category_error = CATEGORY_ERROR.format(category=category)
+                    _LOGGER.error(category_error)
+                    
+                if self.hass.data[DOMAIN_DATA].get(category + '_activity') is not None:
+                    self.attr[category.replace(" ", "_").lower() + '_activity'] = self.hass.data[
+                        DOMAIN_DATA
+                    ].get(category + '_activity')
+                else:
+                    category_error = CATEGORY_ERROR.format(category=category)
+                    _LOGGER.error(category_error)
+
+                if self.hass.data[DOMAIN_DATA].get(category + '_goal_type') is not None:
+                    self.attr[category.replace(" ", "_").lower() + '_goal_type'] = self.hass.data[
+                        DOMAIN_DATA
+                    ].get(category + '_goal_type')
+                else:
+                    category_error = CATEGORY_ERROR.format(category=category)
+                    _LOGGER.error(category_error)
+                    
+                if self.hass.data[DOMAIN_DATA].get(category + '_goal_target_month') is not None:
+                    self.attr[category.replace(" ", "_").lower() + '_goal_target_month'] = self.hass.data[
+                        DOMAIN_DATA
+                    ].get(category + '_goal_target_month')
+                else:
+                    category_error = CATEGORY_ERROR.format(category=category)
+                    _LOGGER.error(category_error)
+                    
+                if self.hass.data[DOMAIN_DATA].get(category + '_goal_percentage_complete') is not None:
+                    self.attr[category.replace(" ", "_").lower() + '_goal_percentage_complete'] = self.hass.data[
+                        DOMAIN_DATA
+                    ].get(category + '_goal_percentage_complete')
                 else:
                     category_error = CATEGORY_ERROR.format(category=category)
                     _LOGGER.error(category_error)
