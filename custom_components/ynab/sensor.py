@@ -89,33 +89,21 @@ class ynabSensor(Entity):
                     self.attr[category.replace(" ", "_").lower() + '_goal_type'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_type')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
                     
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_target') is not None:
                     self.attr[category.replace(" ", "_").lower() + '_goal_target'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_target')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
                     
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_target_month') is not None:
                     self.attr[category.replace(" ", "_").lower() + '_goal_target_month'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_target_month')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
                     
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_percentage_complete') is not None:
                     self.attr[category.replace(" ", "_").lower() + '_goal_percentage_complete'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_percentage_complete')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
 
         if self._accounts is not None:
             for account in self._accounts:
