@@ -253,7 +253,7 @@ class YnabData:
                 elif category.goal_type == "TBD":
                     cat["goal_type"] = "Target Balance by Date"
                 elif category.goal_type == "MF":
-                    cat["goal_type"] = "Montly Funding"
+                    cat["goal_type"] = "Monthly Funding"
                 elif category.goal_type == "NEED":
                     cat["goal_type"] = "Monthly Spending"
                 else:
