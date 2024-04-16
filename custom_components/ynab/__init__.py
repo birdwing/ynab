@@ -247,7 +247,7 @@ class YnabData:
                 cat = {}
                 cat["balance"] = category.balance / 1000
                 cat["budgeted"] = category.budgeted / 1000
-                cat["activity"] = category.activity / 100
+                cat["activity"] = category.activity / 1000
                 if category.goal_type == "TB":
                     cat["goal_type"] = "Target Balance"
                 elif category.goal_type == "TBD":
