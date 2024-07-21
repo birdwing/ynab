@@ -1,6 +1,8 @@
 """Sensor platform for ynab."""
 import logging
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
+
 
 from .const import ACCOUNT_ERROR, CATEGORY_ERROR, DOMAIN_DATA, ICON, CONF_ACCOUNTS_KEY, CONF_BUDGET_KEY, CONF_CATEGORIES_KEY, CONF_CURRENCY_KEY, CONF_BUDGET_NAME_KEY
 
@@ -62,24 +64,26 @@ class ynabSensor(Entity):
         # category attributes
         if self._categories is not None:
             for category in self._categories:
+                category_slug = slugify(category.lower())
+
                 if self.hass.data[DOMAIN_DATA].get(category + '_balance') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_balance'] = self.hass.data[
+                    self.attr[category_slug + '_balance'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_balance')
                 else:
                     category_error = CATEGORY_ERROR.format(category=category)
                     _LOGGER.error(category_error)
-                    
+
                 if self.hass.data[DOMAIN_DATA].get(category + '_budgeted') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_budgeted'] = self.hass.data[
+                    self.attr[category_slug + '_budgeted'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_budgeted')
                 else:
                     category_error = CATEGORY_ERROR.format(category=category)
                     _LOGGER.error(category_error)
-                    
+
                 if self.hass.data[DOMAIN_DATA].get(category + '_activity') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_activity'] = self.hass.data[
+                    self.attr[category_slug + '_activity'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_activity')
                 else:
@@ -87,29 +91,31 @@ class ynabSensor(Entity):
                     _LOGGER.error(category_error)
 
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_type') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_goal_type'] = self.hass.data[
+                    self.attr[category_slug + '_goal_type'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_type')
-                    
+
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_target') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_goal_target'] = self.hass.data[
+                    self.attr[category_slug + '_goal_target'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_target')
-                    
+
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_target_month') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_goal_target_month'] = self.hass.data[
+                    self.attr[category_slug + '_goal_target_month'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_target_month')
-                    
+
                 if self.hass.data[DOMAIN_DATA].get(category + '_goal_percentage_complete') is not None:
-                    self.attr[category.replace(" ", "_").lower() + '_goal_percentage_complete'] = self.hass.data[
+                    self.attr[category_slug + '_goal_percentage_complete'] = self.hass.data[
                         DOMAIN_DATA
                     ].get(category + '_goal_percentage_complete')
 
         if self._accounts is not None:
             for account in self._accounts:
+                account_slug = slugify(account.lower())
+
                 if self.hass.data[DOMAIN_DATA].get(account) is not None:
-                    self.attr[account.replace(" ", "_").lower()] = self.hass.data[
+                    self.attr[account_slug] = self.hass.data[
                         DOMAIN_DATA
                     ].get(account)
                 else:
