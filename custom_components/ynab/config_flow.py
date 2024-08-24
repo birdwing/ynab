@@ -59,7 +59,7 @@ class YnabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             budget = (await self.hass.async_add_executor_job(self.ynab.budgets.get_budget, budget_id)).data.budget
 
             self.data["budget_name"] = budget.name
-            self.data[CONF_CURRENCY_KEY] = budget.currency_format.currency_symbol
+            self.data[CONF_CURRENCY_KEY] = budget.currency_format.iso_code
             return await self.async_step_categories()
 
         budgets_response = await self.hass.async_add_executor_job(self.ynab.budgets.get_budgets)
