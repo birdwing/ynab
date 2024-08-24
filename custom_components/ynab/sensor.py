@@ -1,10 +1,8 @@
 """Sensor platform for ynab."""
 import logging
 from homeassistant.helpers.entity import DeviceInfo
-from homeassistant.util import slugify
 
-from .const import (ACCOUNT_ERROR, CATEGORY_ERROR,
-                    DOMAIN, CONF_ACCOUNTS_KEY,
+from .const import (DOMAIN, CONF_ACCOUNTS_KEY,
                     CONF_BUDGET_KEY, CONF_CATEGORIES_KEY,
                     CONF_BUDGET_NAME_KEY)
 
