@@ -3,7 +3,7 @@ DOMAIN = "ynab"
 DOMAIN_DATA = f"{DOMAIN}_data"
 
 REQUIRED_FILES = ["const.py", "manifest.json", "sensor.py"]
-VERSION = "0.4.0b"
+VERSION = "0.4.0"
 ISSUE_URL = "https://github.com/birdwing/ynab/issues"
 
 STARTUP = """
