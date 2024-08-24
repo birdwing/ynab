@@ -44,9 +44,6 @@ async def async_setup_entry(hass, entry):
     if not url_check:
         return False
 
-    # create data dictionary
-    hass.data[DOMAIN_DATA] = {}
-
     # get global config
     budget = entry.data[CONF_BUDGET_KEY]
     _LOGGER.debug("YAML configured budget - %s", budget)
