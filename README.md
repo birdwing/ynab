@@ -5,8 +5,14 @@ This component will retreieve the following data from your YNAB budget
 
 1. To be budgeted amount
 2. Current month's budgeted amount
-3. Current month's remaining balance of any specified category
-4. Current month's budgeted amount of any specific category
+3. Current month's category information
+  - Remaining Balance
+  - Total Budgeted this month
+  - Total Activity this month
+  - Goal Type
+  - Goal Target
+  - Goal Target Month
+  - Goal Percentage Complete
 5. Current balance of any specified account
 6. Number of transactions needing approval
 7. Number of uncleared transactions
@@ -20,10 +26,9 @@ To keep api usage low, the sensor updates every 5 minutes which equates to 12 ti
 ### HACS
 
 1. Open HACS > Settings
-2. In ADD CUSTOM REPOSITORY box paste this git's URL <https://github.com/wxt9861/ynab> and select type Integration
+2. In ADD CUSTOM REPOSITORY box paste this git's URL <https://github.com/birdwing/ynab> and select type Integration
 3. Click INSTALL
-4. Make necessary modifications to your configuration.yaml
-5. Restart Home Assistant
+4. Restart Home Assistant
 
 ### Manual install
 
@@ -32,27 +37,7 @@ To keep api usage low, the sensor updates every 5 minutes which equates to 12 ti
 3. In the custom_components directory (folder) create a new folder called ynab.
 4. Download all the files from the custom_components/ynab/ directory (folder) in this repository.
 5. Place the files you downloaded in the new directory (folder) you created.
-6. Add ynab: to your HA configuration (see examples below)
-7. Restart Home Assistant
-
-## Configuration options
-
-| Key          | Type     | Required | Default     | Description                                                                                          |
-| ------------ | -------- | -------- | ----------- | ---------------------------------------------------------------------------------------------------- |
-| `api_key`    | `string` | `True`   | None        | YNAB API key (see instructions below)                                                                |
-| `name`       | `string` | False    | sensor.ynab | Custom name for the sensor                                                                           |
-| `budget`     | `string` | False    | last-used   | Budget ID to use if you have multiple budgets. If none specified, your last used budget will be used |
-| `currency`   | `string` | False    | \$          | Currency to use as unit of measurement                                                               |
-| `categories` | `list`   | False    | None        | List of YNAB categories to include in the sensor. These are **CASE SENSITIVE**                       |
-| `accounts` | `list`   | False    | None          | List of YNAB accounts to include in the sensor. These are **CASE SENSITIVE**                       |
-
-### To enable debug
-
-```yaml
-logger:
-  logs:
-    custom_components.ynab: debug
-```
+6. Restart Home Assistant
 
 ### Generate YNAB API key
 
