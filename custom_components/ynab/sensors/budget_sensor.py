@@ -7,7 +7,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
 
-from custom_components.ynab.const import ICON, CONF_CURRENCY_KEY
+from custom_components.ynab.const import BUDGET_ICON, CONF_CURRENCY_KEY
 from custom_components.ynab.api.data_coordinator import YnabDataCoordinator, DataCoordinatorModel
 
 _LOGGER = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ class BudgetSensor(CoordinatorEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.MONETARY
     _attr_state_class = STATE_CLASS_TOTAL
     _attr_has_entity_name = True
-    _attr_icon = ICON
+    _attr_icon = BUDGET_ICON
 
     def __init__(self, coordinator: YnabDataCoordinator, budget_id: str, budget_name: str, device_info: DeviceInfo):
         super().__init__(coordinator)

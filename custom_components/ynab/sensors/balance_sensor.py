@@ -9,7 +9,7 @@ from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
 
 from custom_components.ynab.api.data_coordinator import YnabDataCoordinator, DataCoordinatorModel
-from custom_components.ynab.const import ICON
+from custom_components.ynab.const import CATEGORY_ICON, ACCOUNT_ICON
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -17,7 +17,6 @@ class BalanceSensor(CoordinatorEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.MONETARY
     _attr_state_class = STATE_CLASS_TOTAL
     _attr_has_entity_name = True
-    _attr_icon = ICON
 
     def __init__(self, coordinator: YnabDataCoordinator, handle_data: Callable, data_id: str, device_info: DeviceInfo, budget_name: str):
         super().__init__(coordinator)
@@ -46,6 +45,7 @@ class AccountSensor(BalanceSensor):
         _LOGGER.debug("Received data for %s %s", self._data_id, account_data)
         self._attr_native_value = account_data.balance
         self._attr_name = account_data.name
+        self._attr_icon = ACCOUNT_ICON
 
 class CategorySensor(BalanceSensor):
 
@@ -58,6 +58,7 @@ class CategorySensor(BalanceSensor):
         _LOGGER.debug("Received data for %s %s", self._data_id, category_data)
         self._attr_native_value = category_data.balance
         self._attr_name = category_data.name
+        self._attr_icon = CATEGORY_ICON
         self._attr_extra_state_attributes["budgeted"] = category_data.budgeted
         self._attr_extra_state_attributes["activity"] = category_data.activity
         match category_data.goal_type:

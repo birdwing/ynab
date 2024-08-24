@@ -21,7 +21,9 @@ DEFAULT_BUDGET = "last-used"
 DEFAULT_CURRENCY = "$"
 DEFAULT_API_ENDPOINT = "https://api.ynab.com/v1"
 
-ICON = "mdi:finance"
+BUDGET_ICON = "mdi:finance"
+CATEGORY_ICON = "mdi:cash"
+ACCOUNT_ICON = "mdi:bank-circle-outline"
 
 CONF_NAME = "name"
 CONF_ENABLED = "enabled"
