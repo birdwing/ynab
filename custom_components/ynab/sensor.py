@@ -1,10 +1,14 @@
 """Sensor platform for ynab."""
 import logging
-from homeassistant.helpers.entity import Entity
-from homeassistant.util import slugify
+from homeassistant.helpers.entity import DeviceInfo
 
+from .const import (DOMAIN, CONF_ACCOUNTS_KEY,
+                    CONF_BUDGET_KEY, CONF_CATEGORIES_KEY,
+                    CONF_BUDGET_NAME_KEY)
 
-from .const import ACCOUNT_ERROR, CATEGORY_ERROR, DOMAIN_DATA, ICON, CONF_ACCOUNTS_KEY, CONF_BUDGET_KEY, CONF_CATEGORIES_KEY, CONF_CURRENCY_KEY, CONF_BUDGET_NAME_KEY
+from .sensors.balance_sensor import CategorySensor, AccountSensor
+from .sensors.budget_sensor import BudgetSensor
+from .api.data_coordinator import YnabDataCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -13,141 +17,35 @@ async def async_setup_entry(
     hass, config_entry, async_add_entities
 ):
     """Set up sensor platform."""
-    async_add_entities([ynabSensor(hass, config_entry.data)], True)
+    _LOGGER.debug("Setting up entities")
+    
+    coordinator = YnabDataCoordinator(hass, config_entry.data)
+    await coordinator.async_config_entry_first_refresh()
 
+    budget_id = config_entry.data[CONF_BUDGET_KEY]
+    budget_name = config_entry.data[CONF_BUDGET_NAME_KEY]
+    device_info = DeviceInfo(
+        name=budget_name,
+        manufacturer=DOMAIN,
+        model="Budget",
+        via_device=(DOMAIN, budget_id),
+        identifiers={(DOMAIN, budget_id)}
+    )
+    
+    sensors = [BudgetSensor(coordinator, budget_id, budget_name, device_info)]
+    
+    categories = []
+    if CONF_CATEGORIES_KEY in config_entry.data:
+        categories = config_entry.data[CONF_CATEGORIES_KEY]
 
-class ynabSensor(Entity):
-    """YNAB Sensor class."""
+    for category in categories:
+        sensors.append(CategorySensor(coordinator, category_id=category, device_info=device_info, budget_name=budget_name))
 
-    def __init__(self, hass, config):
-        """Init."""
-        self.hass = hass
-        self.attr = {}
-        self._state = None
-        self._attr_unique_id = config[CONF_BUDGET_KEY]
-        self._name = config[CONF_BUDGET_NAME_KEY]
-        self._measurement = config[CONF_CURRENCY_KEY]
-        self._categories = config[CONF_CATEGORIES_KEY]
-        self._accounts = config[CONF_ACCOUNTS_KEY]
+    accounts = []
+    if CONF_ACCOUNTS_KEY in config_entry.data:
+        accounts = config_entry.data[CONF_ACCOUNTS_KEY]
 
-    async def async_update(self):
-        """Update the sensor."""
-        await self.hass.data[DOMAIN_DATA]["client"].update_data()
+    for account in accounts:
+        sensors.append(AccountSensor(coordinator, account_id=account, device_info=device_info, budget_name=budget_name))
 
-        to_be_budgeted = self.hass.data[DOMAIN_DATA].get("to_be_budgeted")
-
-        if to_be_budgeted is not None:
-            self._state = to_be_budgeted
-
-        # set attributes
-        self.attr["budgeted_this_month"] = self.hass.data[DOMAIN_DATA].get(
-            "budgeted_this_month"
-        )
-
-        self.attr["activity_this_month"] = self.hass.data[DOMAIN_DATA].get(
-            "activity_this_month"
-        )
-        self.attr["age_of_money"] = self.hass.data[DOMAIN_DATA].get("age_of_money")
-
-        self.attr["total_balance"] = self.hass.data[DOMAIN_DATA].get("total_balance")
-
-        self.attr["need_approval"] = self.hass.data[DOMAIN_DATA].get("need_approval")
-
-        self.attr["uncleared_transactions"] = self.hass.data[DOMAIN_DATA].get(
-            "uncleared_transactions"
-        )
-
-        self.attr["overspent_categories"] = self.hass.data[DOMAIN_DATA].get(
-            "overspent_categories"
-        )
-
-        # category attributes
-        if self._categories is not None:
-            for category in self._categories:
-                category_slug = slugify(category.lower())
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_balance') is not None:
-                    self.attr[category_slug + '_balance'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_balance')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_budgeted') is not None:
-                    self.attr[category_slug + '_budgeted'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_budgeted')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_activity') is not None:
-                    self.attr[category_slug + '_activity'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_activity')
-                else:
-                    category_error = CATEGORY_ERROR.format(category=category)
-                    _LOGGER.error(category_error)
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_goal_type') is not None:
-                    self.attr[category_slug + '_goal_type'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_goal_type')
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_goal_target') is not None:
-                    self.attr[category_slug + '_goal_target'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_goal_target')
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_goal_target_month') is not None:
-                    self.attr[category_slug + '_goal_target_month'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_goal_target_month')
-
-                if self.hass.data[DOMAIN_DATA].get(category + '_goal_percentage_complete') is not None:
-                    self.attr[category_slug + '_goal_percentage_complete'] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(category + '_goal_percentage_complete')
-
-        if self._accounts is not None:
-            for account in self._accounts:
-                account_slug = slugify(account.lower())
-
-                if self.hass.data[DOMAIN_DATA].get(account) is not None:
-                    self.attr[account_slug] = self.hass.data[
-                        DOMAIN_DATA
-                    ].get(account)
-                else:
-                    account_error = ACCOUNT_ERROR.format(account=account)
-                    _LOGGER.error(account_error)
-
-    @property
-    def should_poll(self):
-        """Return the name of the sensor."""
-        return True
-
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return self._name
-
-    @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._state
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement of the sensor."""
-        return self._measurement
-
-    @property
-    def icon(self):
-        """Return the icon of the sensor."""
-        return ICON
-
-    @property
-    def extra_state_attributes(self):
-        """Return the state attributes."""
-        return self.attr
+    async_add_entities(sensors, update_before_add=True)

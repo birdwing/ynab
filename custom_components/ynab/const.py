@@ -3,7 +3,7 @@ DOMAIN = "ynab"
 DOMAIN_DATA = f"{DOMAIN}_data"
 
 REQUIRED_FILES = ["const.py", "manifest.json", "sensor.py"]
-VERSION = "0.3.1"
+VERSION = "0.4.0"
 ISSUE_URL = "https://github.com/birdwing/ynab/issues"
 
 STARTUP = """
@@ -16,17 +16,14 @@ If you have any issues with this you need to open an issue here:
 -------------------------------------------------------------------
 """
 
-CATEGORY_ERROR = """Unable to create attribute for category \
-'{category}'. Make sure it exists in YNAB and the case is correct"""
-ACCOUNT_ERROR = """Unable to create attribute for account \
-'{account}'. Make sure it exists in YNAB and the case is correct"""
-
 DEFAULT_NAME = "ynab"
 DEFAULT_BUDGET = "last-used"
 DEFAULT_CURRENCY = "$"
 DEFAULT_API_ENDPOINT = "https://api.ynab.com/v1"
 
-ICON = "mdi:finance"
+BUDGET_ICON = "mdi:finance"
+CATEGORY_ICON = "mdi:cash"
+ACCOUNT_ICON = "mdi:bank-circle-outline"
 
 CONF_NAME = "name"
 CONF_ENABLED = "enabled"
