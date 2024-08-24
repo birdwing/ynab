@@ -56,8 +56,6 @@ async def async_setup_entry(hass, entry):
         accounts = entry.data[CONF_ACCOUNTS_KEY]
         _LOGGER.debug("Monitoring accounts - %s", accounts)
 
-    hass.data[DOMAIN_DATA]["client"] = YnabData(hass, entry)
-
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "sensor")
     )
