@@ -2,7 +2,7 @@ import logging
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor.const import SensorDeviceClass
-from homeassistant.components.sensor.const import STATE_CLASS_TOTAL
+from homeassistant.components.sensor.const import SensorStateClass.TOTAL
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
