@@ -3,7 +3,7 @@ from typing import Callable
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor.const import SensorDeviceClass
-from homeassistant.components.sensor.const import SensorStateClass.TOTAL
+from homeassistant.components.sensor.const import SensorStateClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
@@ -15,7 +15,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class BalanceSensor(CoordinatorEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.MONETARY
-    _attr_state_class = STATE_CLASS_TOTAL
+    _attr_state_class = SensorStateClass.TOTAL
     _attr_has_entity_name = True
 
     def __init__(self, coordinator: YnabDataCoordinator, handle_data: Callable, data_id: str, device_info: DeviceInfo, budget_name: str):
