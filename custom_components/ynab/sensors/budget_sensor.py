@@ -2,7 +2,7 @@ import logging
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor.const import SensorDeviceClass
-from homeassistant.components.sensor.const import SensorStateClass.TOTAL
+from homeassistant.components.sensor.const import SensorStateClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
@@ -14,7 +14,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class BudgetSensor(CoordinatorEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.MONETARY
-    _attr_state_class = STATE_CLASS_TOTAL
+    _attr_state_class = SensorStateClass.TOTAL
     _attr_has_entity_name = True
     _attr_icon = BUDGET_ICON
 
