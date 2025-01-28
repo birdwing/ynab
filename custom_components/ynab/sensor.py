@@ -2,9 +2,9 @@
 import logging
 from homeassistant.helpers.entity import DeviceInfo
 
-from .const import (DOMAIN, CONF_ACCOUNTS_KEY,
+from .const import (DOMAIN, CONF_ACCOUNTS_KEY, CONF_ACCOUNTS_ALL,
                     CONF_BUDGET_KEY, CONF_CATEGORIES_KEY,
-                    CONF_BUDGET_NAME_KEY)
+                    CONF_CATEGORIES_ALL, CONF_BUDGET_NAME_KEY)
 
 from .sensors.balance_sensor import CategorySensor, AccountSensor
 from .sensors.budget_sensor import BudgetSensor
@@ -35,14 +35,18 @@ async def async_setup_entry(
     sensors = [BudgetSensor(coordinator, budget_id, budget_name, device_info)]
     
     categories = []
-    if CONF_CATEGORIES_KEY in config_entry.data:
+    if config_entry.data[CONF_CATEGORIES_ALL]:
+        categories = coordinator.data.categories.keys()
+    elif CONF_CATEGORIES_KEY in config_entry.data:
         categories = config_entry.data[CONF_CATEGORIES_KEY]
 
     for category in categories:
         sensors.append(CategorySensor(coordinator, category_id=category, device_info=device_info, budget_name=budget_name))
 
     accounts = []
-    if CONF_ACCOUNTS_KEY in config_entry.data:
+    if config_entry.data[CONF_ACCOUNTS_ALL]:
+        accounts = coordinator.data.accounts.keys()
+    elif CONF_ACCOUNTS_KEY in config_entry.data:
         accounts = config_entry.data[CONF_ACCOUNTS_KEY]
 
     for account in accounts:
