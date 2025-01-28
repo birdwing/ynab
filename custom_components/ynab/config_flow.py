@@ -3,8 +3,10 @@ import logging
 import voluptuous as vol
 from .const import (
     CONF_ACCOUNTS_KEY,
+    CONF_ACCOUNTS_ALL,
     CONF_BUDGET_KEY,
     CONF_CATEGORIES_KEY,
+    CONF_CATEGORIES_ALL,
     CONF_CURRENCY_KEY,
     DOMAIN
 )
@@ -77,6 +79,7 @@ class YnabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_categories(self, user_input=None):
         if user_input is not None:
+            self.data[CONF_CATEGORIES_ALL] = user_input[CONF_CATEGORIES_ALL]
             if CONF_CATEGORIES_KEY in user_input:
                 self.data[CONF_CATEGORIES_KEY] = user_input[CONF_CATEGORIES_KEY]
             else:
@@ -87,6 +90,7 @@ class YnabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         categories_by_name = await self.fetch_categories()
 
         data_schema = {
+            vol.Required(CONF_CATEGORIES_ALL): bool,
             vol.Optional(CONF_CATEGORIES_KEY): selector({
                 "select": {
                     "options": [{"label": name, "value": category.id} for name, category in categories_by_name.items()],
@@ -111,6 +115,7 @@ class YnabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_accounts(self, user_input=None):
         if user_input is not None:
+            self.data[CONF_ACCOUNTS_ALL] = user_input[CONF_ACCOUNTS_ALL]
             if CONF_ACCOUNTS_KEY in user_input:
                 self.data[CONF_ACCOUNTS_KEY] = user_input[CONF_ACCOUNTS_KEY]
             else:
@@ -124,6 +129,7 @@ class YnabConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         accounts_response = await self.hass.async_add_executor_job(self.ynab.accounts.get_accounts, self.data["budget"])
 
         data_schema = {
+            vol.Required(CONF_ACCOUNTS_ALL): bool,
             vol.Optional(CONF_ACCOUNTS_KEY): selector({
                 "select": {
                     "options": [{"label": account.name, "value": account.id} for account in accounts_response.data.accounts],
