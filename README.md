@@ -1,6 +1,13 @@
 # ynab
 
-YNAB component for Home Assistant
+Home Assistant component for YNAB.
+
+![Works with YNAB.](/custom_components/ynab/brand/logo.png)
+
+> [!NOTE]
+> We are not affiliated, associated, or in any way officially connected with YNAB or any of its subsidiaries or affiliates. The official YNAB website can be found at https://www.ynab.com.
+> The names YNAB and You Need A Budget, as well as related names, tradenames, marks, trademarks, emblems, and images are registered trademarks of YNAB.
+
 This component will retreieve the following data from your YNAB budget
 
 1. To be budgeted amount
@@ -60,3 +67,4 @@ API:
 7. Select one or more accounts to sync then click "Submit", or if you don't want to sync any accounts just click "Submit"
 
 The budget is now setup and will start updating automatically.  You can go through the same process to add multiple budgets all of which will be kept updated.
+
